@@ -7,11 +7,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { TutorialsListComponent } from './components/tutorials-list/tutorials-list.component';
+import { TutorialDetailsComponent } from './components/tutorial-details/tutorial-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TutorialsListComponent
+    TutorialsListComponent,
+    TutorialDetailsComponent,
   ],
   imports: [
     BrowserModule,

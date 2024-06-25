@@ -118,6 +118,13 @@ export class TutorialsListComponent implements OnInit {
   }
 
   saveNewTutorial(): void {
+    // Check if the title already exists
+    const existingTutorial = this.tutorials?.find(t => t.title === this.newTutorial.title);
+    if (existingTutorial) {
+      alert(`Tutorial with title "${this.newTutorial.title}" already exists.`);
+      return;
+    }
+
     const data = {
       title: this.newTutorial.title,
       description: this.newTutorial.description,
@@ -177,5 +184,9 @@ export class TutorialsListComponent implements OnInit {
         return false;
       });
     }
+  }
+
+  isTitleDisabled(title: string): boolean {
+    return this.tutorials?.some(t => t.title === title) || false;
   }
 }

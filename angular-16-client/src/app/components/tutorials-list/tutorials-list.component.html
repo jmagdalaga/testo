@@ -28,7 +28,9 @@
       <tbody>
         <tr *ngFor="let tutorial of filteredTutorials">
           <td>
-            <span *ngIf="!tutorial.isEditing">{{ tutorial.title }}</span>
+            <span *ngIf="!tutorial.isEditing">
+              <a [routerLink]="['/tutorials', tutorial.title]">{{ tutorial.title }}</a>
+            </span>
             <select *ngIf="tutorial.isEditing" class="form-control" [(ngModel)]="tutorial.title">
               <option *ngFor="let choice of titleChoices" [value]="choice">{{ choice }}</option>
             </select>
@@ -53,15 +55,17 @@
               <button class="badge badge-success mr-2" (click)="updateTutorial(tutorial)">Update</button>
               <button class="badge badge-danger mr-2" (click)="deleteTutorial(tutorial.id)">Delete</button>
               <button class="badge badge-secondary mr-2" (click)="cancelEdit(tutorial)">Cancel</button>
-              <button class="badge badge-primary mr-2" *ngIf="tutorial.published" (click)="updatePublished(tutorial, false)">UnPublish</button>
-              <button class="badge badge-primary mr-2" *ngIf="!tutorial.published" (click)="updatePublished(tutorial, true)">Publish</button>
+              <button class="badge badge-warning mr-2" *ngIf="!tutorial.published" (click)="updatePublished(tutorial, true)">Publish</button>
+              <button class="badge badge-warning mr-2" *ngIf="tutorial.published" (click)="updatePublished(tutorial, false)">Unpublish</button>
             </div>
           </td>
         </tr>
         <tr *ngIf="addingNewTutorial">
           <td>
             <select class="form-control" [(ngModel)]="newTutorial.title">
-              <option *ngFor="let choice of titleChoices" [value]="choice">{{ choice }}</option>
+              <option *ngFor="let choice of titleChoices" [value]="choice" [disabled]="isTitleDisabled(choice)">
+                {{ choice }}
+              </option>
             </select>
           </td>
           <td>
@@ -83,9 +87,7 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-primary mb-3" (click)="addNewTutorial()">Add Details</button>
-    <button class="m-3 btn btn-sm btn-danger" (click)="removeAllTutorials()">
-      Remove All
-    </button>
+    <button class="btn btn-primary mb-3" (click)="addNewTutorial()">Add Tutorial</button>
+    <button class="btn btn-danger mb-3 ml-2" (click)="removeAllTutorials()">Remove All</button>
   </div>
 </div>

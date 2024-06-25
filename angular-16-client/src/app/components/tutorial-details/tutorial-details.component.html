@@ -1,0 +1,66 @@
+<div class="list row">
+    <div class="col-md-12">
+      <div class="mt-3">
+        <h4>{{ title }} - Details</h4>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th *ngFor="let month of months">{{ month }}</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tutorial of tutorials">
+            <td>{{ tutorial.title }}</td>
+            <td>
+              <span *ngIf="!tutorial.isEditing">{{ tutorial.description }}</span>
+              <input *ngIf="tutorial.isEditing"
+                type="text"
+                class="form-control"
+                [(ngModel)]="tutorial.description"
+                name="description"
+              />
+            </td>
+            <td>{{ tutorial.published ? "Published" : "Pending" }}</td>
+            <td *ngFor="let month of months">
+              <input *ngIf="tutorial.isEditing" type="text" class="form-control" [(ngModel)]="tutorial[month]"/>
+              <span *ngIf="!tutorial.isEditing">{{ tutorial[month] }}</span>
+            </td>
+            <td>
+              <button *ngIf="!tutorial.isEditing" class="badge badge-primary mr-2" (click)="editTutorial(tutorial)">Edit</button>
+              <div *ngIf="tutorial.isEditing">
+                <button class="badge badge-success mr-2" (click)="updateTutorial(tutorial)">Update</button>
+                <button class="badge badge-danger mr-2" (click)="deleteTutorial(tutorial.id)">Delete</button>
+                <button class="badge badge-secondary mr-2" (click)="cancelEdit(tutorial)">Cancel</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="addingNewTutorial">
+            <td>{{ title }}</td>
+            <td>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="newTutorial.description"
+                name="description"
+              />
+            </td>
+            <td>{{ newTutorial.published ? "Published" : "Pending" }}</td>
+            <td *ngFor="let month of months">
+              <input type="text" class="form-control" [(ngModel)]="newTutorial[month]"/>
+            </td>
+            <td>
+              <button class="badge badge-success mr-2" (click)="saveNewTutorial()">Save</button>
+              <button class="badge badge-secondary mr-2" (click)="cancelNewTutorial()">Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-primary mb-3" (click)="addNewTutorial()">Add Details</button>
+    </div>
+  </div>
+  
