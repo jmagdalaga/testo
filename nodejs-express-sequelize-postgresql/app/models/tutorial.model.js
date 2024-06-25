@@ -6,6 +6,27 @@ module.exports = (sequelize, Sequelize) => {
     description: {
       type: Sequelize.STRING
     },
+    month_year: {
+      type: Sequelize.STRING
+    },
+    currency: {
+      type: Sequelize.STRING
+    },
+    amount: {
+      type: Sequelize.FLOAT
+    },
+    usd_amount: {
+      type: Sequelize.FLOAT
+    },
+    spot_rate: {
+      type: Sequelize.FLOAT
+    },
+    section: {
+      type: Sequelize.STRING
+    },
+    department: {
+      type: Sequelize.STRING
+    },
     published: {
       type: Sequelize.BOOLEAN
     },

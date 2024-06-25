@@ -29,11 +29,17 @@ export class TutorialsListComponent implements OnInit {
   retrieveTutorials(): void {
     this.tutorialService.getAll().subscribe({
       next: (data) => {
-        this.tutorials = data.map(tutorial => ({
-          ...tutorial,
-          isEditing: false,
-          date: tutorial.date ? new Date(tutorial.date) : new Date()
-        }));
+        const uniqueTutorials = data.reduce((acc: Tutorial[], curr: Tutorial) => {
+          if (!acc.some(tutorial => tutorial.title === curr.title)) {
+            acc.push({
+              ...curr,
+              isEditing: false,
+              date: curr.date ? new Date(curr.date) : new Date()
+            });
+          }
+          return acc;
+        }, []);
+        this.tutorials = uniqueTutorials;
         this.filterTutorialsByYear();
       },
       error: (e) => console.error(e)
@@ -57,11 +63,17 @@ export class TutorialsListComponent implements OnInit {
   searchTitle(): void {
     this.tutorialService.findByTitle(this.title).subscribe({
       next: (data) => {
-        this.tutorials = data.map(tutorial => ({
-          ...tutorial,
-          isEditing: false,
-          date: tutorial.date ? new Date(tutorial.date) : new Date()
-        }));
+        const uniqueTutorials = data.reduce((acc: Tutorial[], curr: Tutorial) => {
+          if (!acc.some(tutorial => tutorial.title === curr.title)) {
+            acc.push({
+              ...curr,
+              isEditing: false,
+              date: curr.date ? new Date(curr.date) : new Date()
+            });
+          }
+          return acc;
+        }, []);
+        this.tutorials = uniqueTutorials;
         this.filterTutorialsByYear();
       },
       error: (e) => console.error(e)

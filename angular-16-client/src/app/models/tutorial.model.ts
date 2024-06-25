@@ -1,21 +1,17 @@
-export interface Tutorial {
+export class Tutorial {
   id?: any;
-  title: string;
+  title?: string;
   description?: string;
+  month_year?: string;
+  currency?: string;
+  amount?: number;
+  usd_amount?: number;
+  spot_rate?: number;
+  section?: string;
+  department?: string;
   published?: boolean;
-  date?: Date;
   isEditing?: boolean;
-  APR?: string;
-  MAY?: string;
-  JUN?: string;
-  JUL?: string;
-  AUG?: string;
-  SEP?: string;
-  OCT?: string;
-  NOV?: string;
-  DEC?: string;
-  JAN?: string;
-  FEB?: string;
-  MAR?: string;
-  [key: string]: any; // This allows access to month properties dynamically
+  date?: Date;
+  months?: { [key: string]: number }; // Add this to store monthly USD amounts
+  [key: string]: any; 
 }

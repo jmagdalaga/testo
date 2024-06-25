@@ -16,6 +16,13 @@ exports.create = (req, res) => {
   const tutorial = {
     title: req.body.title,
     description: req.body.description,
+    month_year: req.body.month_year,
+    currency: req.body.currency,
+    amount: req.body.amount,
+    usd_amount: req.body.usd_amount,
+    spot_rate: req.body.spot_rate,
+    section: req.body.section,
+    department: req.body.department,
     published: req.body.published ? req.body.published : false,
     date: req.body.date,
     APR: req.body.APR,
@@ -39,8 +46,7 @@ exports.create = (req, res) => {
     })
     .catch(err => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Tutorial."
+        message: err.message || "Some error occurred while creating the Tutorial."
       });
     });
 };

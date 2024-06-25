@@ -8,8 +8,14 @@
           <tr>
             <th>Title</th>
             <th>Description</th>
+            <th>Month-Year</th>
+            <th>Currency</th>
+            <th>Amount</th>
+            <th>USD Amount</th>
+            <th>Spot Rate</th>
+            <th>Section</th>
+            <th>Department</th>
             <th>Status</th>
-            <th *ngFor="let month of months">{{ month }}</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -25,11 +31,66 @@
                 name="description"
               />
             </td>
-            <td>{{ tutorial.published ? "Published" : "Pending" }}</td>
-            <td *ngFor="let month of months">
-              <input *ngIf="tutorial.isEditing" type="text" class="form-control" [(ngModel)]="tutorial[month]"/>
-              <span *ngIf="!tutorial.isEditing">{{ tutorial[month] }}</span>
+            <td>
+              <span *ngIf="!tutorial.isEditing">{{ tutorial.month_year }}</span>
+              <select *ngIf="tutorial.isEditing" class="form-control" [(ngModel)]="tutorial.month_year">
+                <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+              </select>
             </td>
+            <td>
+              <span *ngIf="!tutorial.isEditing">{{ tutorial.currency }}</span>
+              <select *ngIf="tutorial.isEditing" class="form-control" [(ngModel)]="tutorial.currency" (change)="convertAmount(tutorial)">
+                <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+              </select>
+            </td>
+            <td>
+              <span *ngIf="!tutorial.isEditing">{{ tutorial.amount }}</span>
+              <input *ngIf="tutorial.isEditing"
+                type="text"
+                class="form-control"
+                [(ngModel)]="tutorial.amount"
+                name="amount"
+                (input)="convertAmount(tutorial)"
+              />
+            </td>
+            <td>
+              <span *ngIf="!tutorial.isEditing">{{ tutorial.usd_amount }}</span>
+              <input *ngIf="tutorial.isEditing"
+                type="text"
+                class="form-control"
+                [(ngModel)]="tutorial.usd_amount"
+                name="usd_amount"
+                readonly
+              />
+            </td>
+            <td>
+              <span *ngIf="!tutorial.isEditing">{{ tutorial.spot_rate }}</span>
+              <input *ngIf="tutorial.isEditing"
+                type="text"
+                class="form-control"
+                [(ngModel)]="tutorial.spot_rate"
+                name="spot_rate"
+              />
+            </td>
+            <td>
+              <span *ngIf="!tutorial.isEditing">{{ tutorial.section }}</span>
+              <input *ngIf="tutorial.isEditing"
+                type="text"
+                class="form-control"
+                [(ngModel)]="tutorial.section"
+                name="section"
+              />
+            </td>
+            <td>
+              <span *ngIf="!tutorial.isEditing">{{ tutorial.department }}</span>
+              <input *ngIf="tutorial.isEditing"
+                type="text"
+                class="form-control"
+                [(ngModel)]="tutorial.department"
+                name="department"
+              />
+            </td>
+            <td>{{ tutorial.published ? "Published" : "Pending" }}</td>
             <td>
               <button *ngIf="!tutorial.isEditing" class="badge badge-primary mr-2" (click)="editTutorial(tutorial)">Edit</button>
               <div *ngIf="tutorial.isEditing">
@@ -49,10 +110,59 @@
                 name="description"
               />
             </td>
-            <td>{{ newTutorial.published ? "Published" : "Pending" }}</td>
-            <td *ngFor="let month of months">
-              <input type="text" class="form-control" [(ngModel)]="newTutorial[month]"/>
+            <td>
+              <select class="form-control" [(ngModel)]="newTutorial.month_year">
+                <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+              </select>
             </td>
+            <td>
+              <select class="form-control" [(ngModel)]="newTutorial.currency" (change)="convertAmount(newTutorial)">
+                <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+              </select>
+            </td>
+            <td>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="newTutorial.amount"
+                name="amount"
+                (input)="convertAmount(newTutorial)"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="newTutorial.usd_amount"
+                name="usd_amount"
+                readonly
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="newTutorial.spot_rate"
+                name="spot_rate"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="newTutorial.section"
+                name="section"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="newTutorial.department"
+                name="department"
+              />
+            </td>
+            <td>{{ newTutorial.published ? "Published" : "Pending" }}</td>
             <td>
               <button class="badge badge-success mr-2" (click)="saveNewTutorial()">Save</button>
               <button class="badge badge-secondary mr-2" (click)="cancelNewTutorial()">Cancel</button>

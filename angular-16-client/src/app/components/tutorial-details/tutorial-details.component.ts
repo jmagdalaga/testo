@@ -11,9 +11,16 @@ import { Tutorial } from 'src/app/models/tutorial.model';
 export class TutorialDetailsComponent implements OnInit {
   title: string = '';
   tutorials: Tutorial[] = [];
-  newTutorial: Tutorial = { title: '', description: '', published: false, isEditing: true, date: new Date(), months: {} };
+  newTutorial: Tutorial = { title: '', description: '', month_year: '', currency: '', amount: 0, usd_amount: 0, spot_rate: 0, section: '', department: '', published: false, isEditing: true, date: new Date(), months: {} };
   addingNewTutorial = false;
   months: string[] = [];
+  currencies: string[] = ['PHP', 'YEN'];
+
+  // Conversion rates
+  conversionRates: { [key: string]: number } = {
+    'PHP': 0.018, // Example rate: 1 PHP = 0.018 USD
+    'YEN': 0.009, // Example rate: 1 YEN = 0.009 USD
+  };
 
   constructor(private route: ActivatedRoute, private tutorialService: TutorialService) { }
 
@@ -47,19 +54,28 @@ export class TutorialDetailsComponent implements OnInit {
     const data = {
       title: this.newTutorial.title,
       description: this.newTutorial.description,
+      month_year: this.newTutorial.month_year,
+      currency: this.newTutorial.currency,
+      amount: this.newTutorial.amount,
+      usd_amount: this.newTutorial.usd_amount,
+      spot_rate: this.newTutorial.spot_rate,
+      section: this.newTutorial.section,
+      department: this.newTutorial.department,
       published: this.newTutorial.published,
-      date: this.newTutorial.date,
-      ...this.months.reduce((acc, month) => ({ ...acc, [month]: this.newTutorial[month] || '' }), {})
+      date: this.newTutorial.date
     };
 
     this.tutorialService.create(data).subscribe({
       next: (res) => {
-        console.log(res);
         this.addingNewTutorial = false;
         this.loadItems();
       },
       error: (e) => console.error(e)
     });
+  }
+
+  cancelNewTutorial(): void {
+    this.addingNewTutorial = false;
   }
 
   editTutorial(tutorial: Tutorial): void {
@@ -70,7 +86,6 @@ export class TutorialDetailsComponent implements OnInit {
     tutorial.isEditing = false;
     this.tutorialService.update(tutorial.id, tutorial).subscribe({
       next: (res) => {
-        console.log(res);
         this.loadItems();
       },
       error: (e) => console.error(e)
@@ -80,7 +95,6 @@ export class TutorialDetailsComponent implements OnInit {
   deleteTutorial(id: string): void {
     this.tutorialService.delete(id).subscribe({
       next: (res) => {
-        console.log(res);
         this.loadItems();
       },
       error: (e) => console.error(e)
@@ -92,15 +106,19 @@ export class TutorialDetailsComponent implements OnInit {
     this.loadItems();
   }
 
-  cancelNewTutorial(): void {
-    this.addingNewTutorial = false;
+  convertAmount(tutorial: Tutorial): void {
+    if (tutorial.currency && tutorial.amount !== undefined) {
+      const rate = this.conversionRates[tutorial.currency];
+      if (rate !== undefined) {
+        tutorial.usd_amount = parseFloat((tutorial.amount * rate).toFixed(2));
+      }
+    }
   }
 
   generateMonths(): void {
-    this.months = [];
-    const currentYear = new Date().getFullYear();
+    const selectedYear = new Date().getFullYear();
     for (let i = 3; i < 15; i++) {
-      const year = i < 12 ? currentYear - 1 : currentYear;
+      const year = i < 12 ? selectedYear - 1 : selectedYear;
       const monthIndex = i % 12;
       const date = new Date(year, monthIndex, 1);
       const monthShort = date.toLocaleString('default', { month: 'short' }).toUpperCase();
