@@ -15,79 +15,227 @@
     <select class="form-control mb-3" [(ngModel)]="selectedYear" (change)="onYearChange()">
       <option *ngFor="let year of availableYears" [value]="year">{{ year }}</option>
     </select>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th *ngFor="let month of months">{{ month }}</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let tutorial of filteredTutorials">
-          <td>
-            <span *ngIf="!tutorial.isEditing">
-              <a [routerLink]="['/tutorials', tutorial.title]">{{ tutorial.title }}</a>
-            </span>
-            <select *ngIf="tutorial.isEditing" class="form-control" [(ngModel)]="tutorial.title">
-              <option *ngFor="let choice of titleChoices" [value]="choice">{{ choice }}</option>
-            </select>
-          </td>
-          <td>
-            <span *ngIf="!tutorial.isEditing">{{ tutorial.description }}</span>
-            <input *ngIf="tutorial.isEditing"
-              type="text"
-              class="form-control"
-              [(ngModel)]="tutorial.description"
-              name="description"
-            />
-          </td>
-          <td>{{ tutorial.published ? "Published" : "Pending" }}</td>
-          <td *ngFor="let month of months">
-            <input *ngIf="tutorial.isEditing" type="text" class="form-control" [(ngModel)]="tutorial[month]"/>
-            <span *ngIf="!tutorial.isEditing">{{ tutorial[month] }}</span>
-          </td>
-          <td>
-            <button *ngIf="!tutorial.isEditing" class="badge badge-primary mr-2" (click)="editTutorial(tutorial)">Edit</button>
-            <div *ngIf="tutorial.isEditing">
-              <button class="badge badge-success mr-2" (click)="updateTutorial(tutorial)">Update</button>
-              <button class="badge badge-danger mr-2" (click)="deleteTutorial(tutorial.id)">Delete</button>
-              <button class="badge badge-secondary mr-2" (click)="cancelEdit(tutorial)">Cancel</button>
-              <button class="badge badge-warning mr-2" *ngIf="!tutorial.published" (click)="updatePublished(tutorial, true)">Publish</button>
-              <button class="badge badge-warning mr-2" *ngIf="tutorial.published" (click)="updatePublished(tutorial, false)">Unpublish</button>
-            </div>
-          </td>
-        </tr>
-        <tr *ngIf="addingNewTutorial">
-          <td>
-            <select class="form-control" [(ngModel)]="newTutorial.title">
-              <option *ngFor="let choice of titleChoices" [value]="choice" [disabled]="isTitleDisabled(choice)">
-                {{ choice }}
-              </option>
-            </select>
-          </td>
-          <td>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="newTutorial.description"
-              name="description"
-            />
-          </td>
-          <td>{{ newTutorial.published ? "Published" : "Pending" }}</td>
-          <td *ngFor="let month of months">
-            <input type="text" class="form-control" [(ngModel)]="newTutorial[month]"/>
-          </td>
-          <td>
-            <button class="badge badge-success mr-2" (click)="saveNewTutorial()">Save</button>
-            <button class="badge badge-secondary mr-2" (click)="cancelNewTutorial()">Cancel</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <button class="btn btn-primary mb-3" (click)="addNewTutorial()">Add Tutorial</button>
+    
+    <!-- Dropdown button with eye icon -->
+<div class="dropup mb-3">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-eye"></i>
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#">User 1</a>
+    <a class="dropdown-item" href="#">User 2</a>
+    <a class="dropdown-item" href="#">User 3</a>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th *ngFor="let month of months">{{ month }}</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let tutorial of filteredTutorials" [ngClass]="{'highlighted': tutorial === selectedTutorial}">
+      <td (click)="selectTutorial(tutorial)">
+        <span *ngIf="!tutorial.isEditing">
+          <a [routerLink]="['/tutorials', tutorial.title]">{{ tutorial.title }}</a>
+        </span>
+        <select *ngIf="tutorial.isEditing" class="form-control" [(ngModel)]="tutorial.title">
+          <option *ngFor="let choice of titleChoices" [value]="choice">{{ choice }}</option>
+        </select>
+      </td>
+      <td>
+        <span *ngIf="!tutorial.isEditing">{{ tutorial.description }}</span>
+        <input *ngIf="tutorial.isEditing" type="text" class="form-control" [(ngModel)]="tutorial.description" name="description" />
+      </td>
+      <td>{{ tutorial.published ? "Published" : "Pending" }}</td>
+      <td *ngFor="let month of months" [ngClass]="{'no-highlight': month.startsWith('SEP')}">
+        <input *ngIf="tutorial.isEditing" type="text" class="form-control" [(ngModel)]="tutorial[month]" />
+        <span *ngIf="!tutorial.isEditing">{{ tutorial[month] }}</span>
+      </td>
+      <td>
+        <button *ngIf="!tutorial.isEditing" class="badge badge-primary mr-2" (click)="editTutorial(tutorial)">Edit</button>
+        <div *ngIf="tutorial.isEditing">
+          <button class="badge badge-success mr-2" (click)="updateTutorial(tutorial)">Update</button>
+          <button class="badge badge-danger mr-2" (click)="deleteTutorial(tutorial.id)">Delete</button>
+          <button class="badge badge-secondary mr-2" (click)="cancelEdit(tutorial)">Cancel</button>
+          <button class="badge badge-warning mr-2" *ngIf="!tutorial.published" (click)="updatePublished(tutorial, true)">Publish</button>
+          <button class="badge badge-warning mr-2" *ngIf="tutorial.published" (click)="updatePublished(tutorial, false)">Unpublish</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addTutorialModal">Add Tutorial</button>    
     <button class="btn btn-danger mb-3 ml-2" (click)="removeAllTutorials()">Remove All</button>
+    <div class="modal fade" id="addTutorialModal" tabindex="-1" role="dialog" aria-labelledby="addTutorialModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addTutorialModalLabel">Add New Tutorial</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="tutorialTitle">Title</label>
+              <select class="form-control" [(ngModel)]="newTutorial.title" id="tutorialTitle">
+                <option *ngFor="let choice of titleChoices" [value]="choice" [disabled]="isTitleDisabled(choice)">
+                  {{ choice }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="tutorialDescription">Description</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="newTutorial.description"
+                id="tutorialDescription"
+                name="description"
+              />
+            </div>
+            <div class="form-group">
+              <label for="feedback">Feedback</label>
+              <textarea
+                class="form-control"
+                id="feedback"
+                rows="3"
+              ></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="saveNewTutorial()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid border">
+  <div class="row">
+    <!-- HEADCOUNT Section -->
+    <div class="col-md-3 border">
+      <h5>HEADCOUNT</h5>
+      <div class="d-flex align-items-center">
+        <div class="form-group row">
+          <label for="januaryHeadcount" class="col-sm-6 col-form-label">January</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="januaryHeadcount">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="januaryPercentage" class="col-sm-6 col-form-label">% January</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="januaryPercentage">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Middle Section with Dropdown and Text Area -->
+    <div class="col-md-6 border">
+      <div *ngFor="let section of sections; let i = index" class="d-flex mb-2">
+        <div class="form-group col-sm-6">
+          <label for="dropdownMenu{{i}}">Dropdown {{i+1}}</label>
+          <select class="form-control" [(ngModel)]="section.dropdown" id="dropdownMenu{{i}}">
+            <option>Option 1</option>
+            <option>Option 2</option>
+            <option>Option 3</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-6">
+          <label for="textArea{{i}}">Text Area {{i+1}}</label>
+          <textarea class="form-control" [(ngModel)]="section.text" id="textArea{{i}}" rows="1"></textarea>
+        </div>
+      </div>
+      <button class="btn btn-primary mb-3" (click)="addNewSection()">Add New Section</button>
+    </div>
+
+    <!-- Check Boxes Section -->
+    <div class="col-md-3 border">
+      <h5>Check Boxes</h5>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="checkbox1">
+        <label class="form-check-label" for="checkbox1">
+          January
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="checkbox2">
+        <label class="form-check-label" for="checkbox2">
+          January
+        </label>
+      </div>
+      <!-- Repeat as needed for other checkboxes -->
+      <!-- Example repeated checkboxes -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="checkbox3">
+        <label class="form-check-label" for="checkbox3">
+          January
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="checkbox4">
+        <label class="form-check-label" for="checkbox4">
+          January
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="checkbox5">
+        <label class="form-check-label" for="checkbox5">
+          January
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="checkbox6">
+        <label class="form-check-label" for="checkbox6">
+          January
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="checkbox7">
+        <label class="form-check-label" for="checkbox7">
+          January
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="checkbox8">
+        <label class="form-check-label" for="checkbox8">
+          January
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="checkbox9">
+        <label class="form-check-label" for="checkbox9">
+          January
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="checkbox10">
+        <label class="form-check-label" for="checkbox10">
+          January
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="checkbox11">
+        <label class="form-check-label" for="checkbox11">
+          January
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="checkbox12">
+        <label class="form-check-label" for="checkbox12">
+          January
+        </label>
+      </div>
+    </div>
   </div>
 </div>

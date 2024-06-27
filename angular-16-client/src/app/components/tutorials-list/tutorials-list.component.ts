@@ -17,7 +17,16 @@ export class TutorialsListComponent implements OnInit {
   availableYears: number[] = [];
   selectedYear: number = new Date().getFullYear();
   months: string[] = [];
+  selectedTutorial: any;
+  sections: any[] = [{ dropdown: '', text: '' }];
 
+  selectTutorial(tutorial: any) {
+    this.selectedTutorial = tutorial;
+  }
+  
+  addNewSection() {
+    this.sections.push({ dropdown: '', text: '' });
+  }
   constructor(private tutorialService: TutorialService) {}
 
   ngOnInit(): void {

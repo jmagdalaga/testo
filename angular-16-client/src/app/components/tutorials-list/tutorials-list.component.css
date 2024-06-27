@@ -3,3 +3,11 @@
   max-width: 750px;
   margin: auto;
 }
+
+.highlighted {
+  background-color: yellow; /* Choose your highlight color */
+}
+
+.no-highlight {
+  background-color: white; /* Remove the highlight color */
+}
