@@ -1,16 +1,5 @@
 <div class="list row">
   <div class="col-md-12">
-    <div class="mt-3">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Search by title"
-        [(ngModel)]="title"
-      />
-      <button class="btn btn-outline-secondary mt-2" (click)="searchTitle()">
-        Search
-      </button>
-    </div>
     <h4>Tutorials List</h4>
     <select class="form-control mb-3" [(ngModel)]="selectedYear" (change)="onYearChange()">
       <option *ngFor="let year of availableYears" [value]="year">{{ year }}</option>
@@ -119,10 +108,11 @@
   </div>
 </div>
 
-<div class="container-fluid border">
+
+<div class="container-fluid border" style="background-color: #343A40; color: white; padding: 20px;">
   <div class="row">
     <!-- HEADCOUNT Section -->
-    <div class="col-md-3 border">
+    <div class="col-md-3 border" style="background-color: white; color: black; padding: 10px; margin: 10px;">
       <h5>HEADCOUNT</h5>
       <div class="d-flex align-items-center">
         <div class="form-group row">
@@ -140,10 +130,10 @@
       </div>
     </div>
 
-    <!-- Middle Section with Dropdown and Text Area -->
-    <div class="col-md-6 border">
+    <!-- Middle Section with Dropdown and Text Areas -->
+    <div class="col-md-6 border" style="background-color: white; color: black; padding: 10px; margin: 10px;">
       <div *ngFor="let section of sections; let i = index" class="d-flex mb-2">
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-4">
           <label for="dropdownMenu{{i}}">Dropdown {{i+1}}</label>
           <select class="form-control" [(ngModel)]="section.dropdown" id="dropdownMenu{{i}}">
             <option>Option 1</option>
@@ -151,16 +141,20 @@
             <option>Option 3</option>
           </select>
         </div>
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-4">
           <label for="textArea{{i}}">Text Area {{i+1}}</label>
           <textarea class="form-control" [(ngModel)]="section.text" id="textArea{{i}}" rows="1"></textarea>
+        </div>
+        <div class="form-group col-sm-4">
+          <label for="amount{{i}}">Amount {{i+1}}</label>
+          <textarea class="form-control" [(ngModel)]="section.amount" id="amount{{i}}" rows="1"></textarea>
         </div>
       </div>
       <button class="btn btn-primary mb-3" (click)="addNewSection()">Add New Section</button>
     </div>
 
     <!-- Check Boxes Section -->
-    <div class="col-md-3 border">
+    <div class="col-md-3 border" style="background-color: white; color: black; padding: 10px; margin: 10px;">
       <h5>Check Boxes</h5>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="checkbox1">
@@ -175,7 +169,6 @@
         </label>
       </div>
       <!-- Repeat as needed for other checkboxes -->
-      <!-- Example repeated checkboxes -->
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="checkbox3">
         <label class="form-check-label" for="checkbox3">
@@ -239,3 +232,9 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
